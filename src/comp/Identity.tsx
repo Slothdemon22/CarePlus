@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
-import { FaPassport, FaIdCard, FaIdBadge } from 'react-icons/fa';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React from 'react'; // Removed useState since it's not used
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { FileUpload } from '@/components/ui/file-upload';
 
-const Identity = ({ register, errors,setFile, file }: any) => {
-  
+// Define a type for props instead of using 'any'
+interface IdentityProps {
+  register: any; // You can specify a more precise type if known
+  errors: Record<string, any>; // Define an appropriate structure for errors
+  setFile: (file: File | null) => void;
+  file: File | null;
+}
 
+const Identity: React.FC<IdentityProps> = ({ register, errors, setFile, file }) => {
+  
   const handleFileChange = (file: File | null) => {
-   setFile(file);
+    setFile(file);
   };
 
   return (
