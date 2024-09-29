@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
-import dbConnect from "@/lib/dbConnect"; // Ensure this path is correct
-import User from "@/app/api/schema/user"; // Ensure this path is correct
+// Removed dbConnect and User imports since they are not used
+// import dbConnect from "@/lib/dbConnect"; 
+// import User from "@/app/api/schema/user"; 
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -17,7 +18,7 @@ export async function middleware(req: NextRequest) {
     return new NextResponse(null, { status: 204 });
   }
 
-  const token = req.cookies.get("token") as any;
+  const token = req.cookies.get("token")?.value; // Use optional chaining and assume it's a string | undefined
   if (!token) {
     // If no token is present, redirect to the home page
     return NextResponse.redirect(new URL("/", req.url));
@@ -25,12 +26,12 @@ export async function middleware(req: NextRequest) {
 
   try {
     // Verify the token and extract the payload
-    const { payload } = await jwtVerify(token.value, new TextEncoder().encode(process.env.JWT_SECRET));
-    //console.log("Decoded Payload:", payload);
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+    // console.log("Decoded Payload:", payload);
 
     // Check if the current route requires `isComplete` check
     if (pathname === "/appointment") {
-     // console.log(payload.isComplete, "h");
+      // console.log(payload.isComplete, "h");
       if (!payload.isComplete) {
         // If `isComplete` is false or not present, redirect to `/Details`
         return NextResponse.redirect(new URL("/Details", req.url));
