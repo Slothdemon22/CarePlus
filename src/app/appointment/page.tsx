@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaStethoscope } from "react-icons/fa";
-import { Check, ChevronDown, Loader } from "lucide-react";
+import {  ChevronDown, Loader } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import DateTimePicker from "@/comp/DateTimePicker"; // Adjust the import path accordingly

@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import {  NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import AppointmentDetails from '@/app/api/schema/appointment'; // Adjust path based on your folder structure
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   await dbConnect();
   console.log("Fetching appointments...");
 
