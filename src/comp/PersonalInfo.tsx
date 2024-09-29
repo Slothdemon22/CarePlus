@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { IoPersonOutline, IoCall, IoCalendar } from "react-icons/io5";
@@ -16,15 +16,14 @@ const PersonalInfo = ({ register, errors, setValue }: any) => {
   const handleDateChange = (date: Date | undefined) => {
     setSelectedDate(date);
     if (date) {
-      setValue("dob", date, { shouldValidate: true }); // Set dob with the selected date
+      setValue("dob", date, { shouldValidate: true });
     } else {
-      setValue("dob", ""); // Clear the dob if no date is selected
+      setValue("dob", "");
     }
   };
 
   return (
     <div className="relative w-full space-y-4">
-      {/* First Name */}
       <div className="relative">
         <IoPersonOutline className="absolute left-3 top-[37px] transform -translate-y-1/2 text-gray-500 text-lg sm:text-xl" />
         <Label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
@@ -41,7 +40,6 @@ const PersonalInfo = ({ register, errors, setValue }: any) => {
         </div>
       </div>
 
-      {/* Phone No */}
       <div className="flex md:flex-row gap-2 flex-col">
         <div className="relative w-full">
           <IoCall className="absolute left-3 top-[37px] transform -translate-y-1/2 text-gray-500 text-lg sm:text-xl" />
@@ -59,7 +57,6 @@ const PersonalInfo = ({ register, errors, setValue }: any) => {
           </div>
         </div>
 
-        {/* Date of Birth */}
         <div className="relative w-full">
           <Label htmlFor="dob" className="block text-sm font-medium text-gray-700">
             Date of Birth
@@ -78,7 +75,7 @@ const PersonalInfo = ({ register, errors, setValue }: any) => {
               <CalendarComponent
                 mode="single"
                 selected={selectedDate}
-                onSelect={handleDateChange} // Update the date and set the dob value
+                onSelect={handleDateChange}
                 className="rounded-md border"
               />
             </PopoverContent>
@@ -89,7 +86,6 @@ const PersonalInfo = ({ register, errors, setValue }: any) => {
         </div>
       </div>
 
-      {/* Address */}
       <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 space-x-4">
         <div className="relative md:w-1/2 w-full">
           <FaAddressCard className="absolute left-3 top-[37px] transform -translate-y-1/2 text-gray-500 text-lg sm:text-xl" />
@@ -105,31 +101,22 @@ const PersonalInfo = ({ register, errors, setValue }: any) => {
           </div>
         </div>
 
-        {/* Gender */}
         <div className="relative md:w-1/2 w-full space-x-4">
-  <Label htmlFor="gender" className="block mb-2 text-sm font-medium mx-4 text-gray-700">Gender</Label>
-  <RadioGroup {...register("gender", { required: "Gender is required" })} className="flex md:flex-row flex-col md:justify-start justify-center">
-    <div className="flex items-center">
-      <RadioGroupItem value="male" id="male" />
-      <Label htmlFor="male" className="ml-2">Male</Label>
-    </div>
-    <div className="flex items-center">
-      <RadioGroupItem value="female" id="female" />
-      <Label htmlFor="female" className="ml-2">Female</Label>
-    </div>
-    <div className="flex items-center">
-      <RadioGroupItem value="other" id="other" />
-      <Label htmlFor="other" className="ml-2">Other</Label>
-    </div>
-  </RadioGroup>
-  <div className="min-h-[24px] mt-1">
-    {errors.gender && <p className="text-red-500 text-sm">{errors.gender.message}</p>}
-  </div>
-</div>
+          <Label htmlFor="gender" className="block mb-2 text-sm font-medium text-gray-700">Gender</Label>
+          <RadioGroup defaultValue="female">
+            <div className="flex gap-4">
+              <RadioGroupItem value="female" id="gender-female" {...register("gender")} />
+              <Label htmlFor="gender-female">Female</Label>
+              <RadioGroupItem value="male" id="gender-male" {...register("gender")} />
+              <Label htmlFor="gender-male">Male</Label>
+              <RadioGroupItem value="other" id="gender-other" {...register("gender")} />
+              <Label htmlFor="gender-other">Other</Label>
+            </div>
+          </RadioGroup>
+        </div>
       </div>
 
-      {/* Occupation */}
-      <div className="relative">
+      <div className="relative w-full">
         <FaBriefcase className="absolute left-3 top-[37px] transform -translate-y-1/2 text-gray-500 text-lg sm:text-xl" />
         <Label htmlFor="occupation" className="block text-sm font-medium text-gray-700">Occupation</Label>
         <Input
