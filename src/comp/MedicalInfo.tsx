@@ -8,10 +8,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
 
 // Define the props for the component
-interface MedicalInfoProps {
-  register: UseFormRegister<MedicalInfoForm>;
-  errors: FieldErrors<MedicalInfoForm>;
-}
+// interface MedicalInfoProps {
+//   register: UseFormRegister<MedicalInfoForm>;
+//   errors: FieldErrors<MedicalInfoForm>;
+// }
 
 export interface MedicalInfoForm {
   insuranceProvider: string;

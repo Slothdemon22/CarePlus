@@ -4,16 +4,19 @@ import { Input } from '@/components/ui/input';
 import { FileUpload } from '@/components/ui/file-upload';
 import { UseFormRegister, FieldErrors, FieldError } from 'react-hook-form';
 
-// Define a type for props
+interface FormData {
+  idNumber: string;
+  otherConsent: boolean;
+}
+
 interface IdentityProps {
-  register: UseFormRegister<any>; // Use the actual form data type if known
-  errors: FieldErrors; // Use FieldErrors type from react-hook-form
+  register: UseFormRegister<FormData>;
+  errors: FieldErrors<FormData>;
   setFile: (file: File | null) => void;
   file: File | null;
 }
 
 const Identity: React.FC<IdentityProps> = ({ register, errors, setFile, file }) => {
-  
   const handleFileChange = (file: File | null) => {
     setFile(file);
   };
@@ -48,9 +51,7 @@ const Identity: React.FC<IdentityProps> = ({ register, errors, setFile, file }) 
           Upload Document
         </Label>
         <div className="mt-2">
-          <FileUpload 
-            onChange={handleFileChange} // Handle file change in local state
-          />
+          <FileUpload onChange={handleFileChange} />
         </div>
         <div className="min-h-[24px] mt-1">
           {file === null && <p className="text-red-500 text-sm">File upload is required.</p>}
@@ -69,7 +70,9 @@ const Identity: React.FC<IdentityProps> = ({ register, errors, setFile, file }) 
             {...register('otherConsent', { required: 'You must agree to the terms.' })}
             className="mr-2"
           />
-          <Label htmlFor="otherConsent" className="text-sm text-gray-700">I agree to the additional terms and conditions.</Label>
+          <Label htmlFor="otherConsent" className="text-sm text-gray-700">
+            I agree to the additional terms and conditions.
+          </Label>
         </div>
         <div className="min-h-[24px] mt-1">
           {errors.otherConsent && (

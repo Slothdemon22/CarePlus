@@ -27,19 +27,18 @@ export default function AppointmentTable() {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/getAppoinments');
+      const response = await axios.get<{ data: Appointment[] }>('http://localhost:3000/api/getAppoinments');
       console.log(response.data.data);
-      // Map the response data to the correct structure
+      // Ensure the response data has the correct type
       if (Array.isArray(response.data.data)) {
-        const formattedAppointments = response.data.data.map((appointment: any) => ({
-          id: appointment._id, // Use _id for the appointment ID
-          patientName: appointment.
-          userName || "Unknown Patient", // Use the correct field
+        const formattedAppointments = response.data.data.map((appointment: Appointment) => ({
+          id: appointment.id, // Use correct type for ID
+          patientName: appointment.patientName || "Unknown Patient", // Correct field for patient name
           dateTime: appointment.dateTime,
-          doctorName: appointment.doctor, // Get doctor's name from 'doctor' field
+          doctorName: appointment.doctorName, // Get doctor's name
           status: appointment.status,
-          details: appointment.appointmentReason || "No details provided.", // Use appointmentReason if available
-          comments: appointment.comments || "No comments provided.", // Use comments if available
+          details: appointment.details || "No details provided.", // Use details field
+          comments: appointment.comments || "No comments provided.", // Use comments field
         }));
         setAppointments(formattedAppointments);
       } else {
@@ -49,6 +48,7 @@ export default function AppointmentTable() {
       console.error(error);
     }
   };
+  
 
   useEffect(() => {
     fetchAppointments(); // Fetch appointments when component mounts

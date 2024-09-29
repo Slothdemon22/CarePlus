@@ -1,5 +1,6 @@
-"use client"
+"use client";
 import React from "react";
+import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { IoPersonOutline, IoCall, IoCalendar } from "react-icons/io5";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
@@ -10,7 +11,24 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FaAddressCard, FaBriefcase } from "react-icons/fa";
 import { format } from "date-fns";
 
-const PersonalInfo = ({ register, errors, setValue }: any) => {
+// Define the form data interface
+interface PersonalInfoFormValues {
+  firstName: string;
+  phoneNo: string;
+  dob: Date | string;
+  address: string;
+  gender: string;
+  occupation: string;
+}
+
+// Define the component props with correct types
+interface PersonalInfoProps {
+  register: UseFormRegister<PersonalInfoFormValues>;
+  errors: FieldErrors<PersonalInfoFormValues>;
+  setValue: UseFormSetValue<PersonalInfoFormValues>;
+}
+
+const PersonalInfo: React.FC<PersonalInfoProps> = ({ register, errors, setValue }) => {
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(undefined);
 
   const handleDateChange = (date: Date | undefined) => {
@@ -24,6 +42,7 @@ const PersonalInfo = ({ register, errors, setValue }: any) => {
 
   return (
     <div className="relative w-full space-y-4">
+      {/* First Name */}
       <div className="relative">
         <IoPersonOutline className="absolute left-3 top-[37px] transform -translate-y-1/2 text-gray-500 text-lg sm:text-xl" />
         <Label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
@@ -40,6 +59,7 @@ const PersonalInfo = ({ register, errors, setValue }: any) => {
         </div>
       </div>
 
+      {/* Phone Number */}
       <div className="flex md:flex-row gap-2 flex-col">
         <div className="relative w-full">
           <IoCall className="absolute left-3 top-[37px] transform -translate-y-1/2 text-gray-500 text-lg sm:text-xl" />
@@ -57,6 +77,7 @@ const PersonalInfo = ({ register, errors, setValue }: any) => {
           </div>
         </div>
 
+        {/* Date of Birth */}
         <div className="relative w-full">
           <Label htmlFor="dob" className="block text-sm font-medium text-gray-700">
             Date of Birth
@@ -86,36 +107,37 @@ const PersonalInfo = ({ register, errors, setValue }: any) => {
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 space-x-4">
-        <div className="relative md:w-1/2 w-full">
-          <FaAddressCard className="absolute left-3 top-[37px] transform -translate-y-1/2 text-gray-500 text-lg sm:text-xl" />
-          <Label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</Label>
-          <Input
-            id="address"
-            {...register("address", { required: "Address is required" })}
-            placeholder="Enter your address"
-            className="pl-12 pr-3 w-full border rounded-md"
-          />
-          <div className="min-h-[24px] mt-1">
-            {errors.address && <p className="text-red-500 text-sm">{errors.address.message}</p>}
-          </div>
-        </div>
-
-        <div className="relative md:w-1/2 w-full space-x-4">
-          <Label htmlFor="gender" className="block mb-2 text-sm font-medium text-gray-700">Gender</Label>
-          <RadioGroup defaultValue="female">
-            <div className="flex gap-4">
-              <RadioGroupItem value="female" id="gender-female" {...register("gender")} />
-              <Label htmlFor="gender-female">Female</Label>
-              <RadioGroupItem value="male" id="gender-male" {...register("gender")} />
-              <Label htmlFor="gender-male">Male</Label>
-              <RadioGroupItem value="other" id="gender-other" {...register("gender")} />
-              <Label htmlFor="gender-other">Other</Label>
-            </div>
-          </RadioGroup>
+      {/* Address */}
+      <div className="relative md:w-1/2 w-full">
+        <FaAddressCard className="absolute left-3 top-[37px] transform -translate-y-1/2 text-gray-500 text-lg sm:text-xl" />
+        <Label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</Label>
+        <Input
+          id="address"
+          {...register("address", { required: "Address is required" })}
+          placeholder="Enter your address"
+          className="pl-12 pr-3 w-full border rounded-md"
+        />
+        <div className="min-h-[24px] mt-1">
+          {errors.address && <p className="text-red-500 text-sm">{errors.address.message}</p>}
         </div>
       </div>
 
+      {/* Gender */}
+      <div className="relative md:w-1/2 w-full space-x-4">
+        <Label htmlFor="gender" className="block mb-2 text-sm font-medium text-gray-700">Gender</Label>
+        <RadioGroup defaultValue="female">
+          <div className="flex gap-4">
+            <RadioGroupItem value="female" id="gender-female" {...register("gender")} />
+            <Label htmlFor="gender-female">Female</Label>
+            <RadioGroupItem value="male" id="gender-male" {...register("gender")} />
+            <Label htmlFor="gender-male">Male</Label>
+            <RadioGroupItem value="other" id="gender-other" {...register("gender")} />
+            <Label htmlFor="gender-other">Other</Label>
+          </div>
+        </RadioGroup>
+      </div>
+
+      {/* Occupation */}
       <div className="relative w-full">
         <FaBriefcase className="absolute left-3 top-[37px] transform -translate-y-1/2 text-gray-500 text-lg sm:text-xl" />
         <Label htmlFor="occupation" className="block text-sm font-medium text-gray-700">Occupation</Label>
