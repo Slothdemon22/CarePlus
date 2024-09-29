@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
- // Import the type
 
 // Define the props for the component
 interface MedicalInfoProps {
@@ -22,7 +21,11 @@ export interface MedicalInfoForm {
   familyMedicalHistory?: string;
   pastMedicalHistory?: string;
 }
-const MedicalInfo: React.FC<MedicalInfoProps> = ({ register, errors }) => {
+ interface props {
+  register: UseFormRegister<MedicalInfoForm>;
+  errors: FieldErrors<MedicalInfoForm>
+ }
+const MedicalInfo = ({ register, errors }:props) => {
   return (
     <div className='w-full'>
       <h1 className='text-3xl text-left px-2 mt-12'>Medical Information</h1>

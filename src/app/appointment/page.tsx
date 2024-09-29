@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaStethoscope } from "react-icons/fa";
-import {  ChevronDown, Loader } from "lucide-react";
+import { ChevronDown, Loader } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import DateTimePicker from "@/comp/DateTimePicker"; // Adjust the import path accordingly
@@ -18,12 +18,16 @@ import {
 import { cn } from "@/lib/utils";
 import { toast } from "react-toastify";
 import axios from "axios";
+
 // Define the Zod schema for validation
 const appointmentSchema = z.object({
   doctor: z.string().nonempty("Please select a doctor."),
   appointmentReason: z.string().nonempty("Please enter the reason for the appointment."),
   comments: z.string().optional(),
 });
+
+// Infer the type of the appointment data from the schema
+type AppointmentData = z.infer<typeof appointmentSchema>;
 
 const doctors = [
   {
@@ -56,7 +60,7 @@ export default function DoctorSelect() {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm({
+  } = useForm<AppointmentData>({
     resolver: zodResolver(appointmentSchema),
   });
 
@@ -64,7 +68,7 @@ export default function DoctorSelect() {
   const [dob, setDob] = useState<Date | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit: SubmitHandler<AppointmentData> = async (data) => {
     if (!dob) {
       toast.error("Please enter Appointment time");
       return;
@@ -175,7 +179,7 @@ export default function DoctorSelect() {
 
         {/* Expected Date and Time Picker */}
         <div className="mt-6 w-full">
-          <DateTimePicker onDateChange={setDob}  /> {/* Pass loading prop */}
+          <DateTimePicker onDateChange={setDob} />
         </div>
 
         {/* Appointment Reason and Comments */}
@@ -224,11 +228,11 @@ export default function DoctorSelect() {
       {/* Side Image */}
       <div className="w-full lg:w-1/4 sticky top-16 right-0 h-auto hidden lg:block">
         <Image
-          src="/side1.png" // Adjust the image path as necessary
-          alt="Appointment illustration"
-          width={500}
+          src="/side1.png" // Adjust the image path accordingly
+          alt="Side Image"
+          width={350}
           height={500}
-          className="h-full object-cover"
+          className="object-cover rounded-lg"
         />
       </div>
     </div>

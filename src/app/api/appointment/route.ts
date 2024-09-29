@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   await dbConnect();
 
   try {
-    const token = req.cookies.get("token") as any;
+    const token = req.cookies.get("token") ;
 
     // Verify the token and extract the payload
     if (!token) {

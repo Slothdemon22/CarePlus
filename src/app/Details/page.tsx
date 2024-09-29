@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
-import { useRouter } from "next/navigation"; // Import useRouter
+import { useRouter } from "next/navigation";
 import PersonalInfo from "../../comp/PersonalInfo";
 import MedicalInfo from "../../comp/MedicalInfo";
 import Identity from "../../comp/Identity";
 import Image from "next/image";
 import { FaStethoscope } from "react-icons/fa";
-import { useForm, FieldValues } from "react-hook-form";
-import { Button } from "@/components/ui/button"; // Assuming this is a custom button component
+import { useForm, UseFormRegister, FieldValues } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useEdgeStore } from "@/lib/edgestore";
@@ -15,26 +15,27 @@ import { useEdgeStore } from "@/lib/edgestore";
 const Details = () => {
     const { edgestore } = useEdgeStore();
     const [file, setFile] = React.useState<File | null>(null);
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<MedicalInfoForm>({
         defaultValues: {
             dob: "",
             gender: "",
+            // Add other default values here if needed
         },
     });
 
-    const router = useRouter(); // Initialize useRouter
+    const router = useRouter();
 
-    const onSubmit = async (data: FieldValues) => {
+    const onSubmit = async (data: MedicalInfoForm) => {
         if (file === null) {
             toast.error("Please upload an image");
             return;
         }
-    
+
         if (data.dob === "") {
             toast.error("Please enter your date of birth");
             return;
         }
-    
+
         try {
             // Step 1: Upload the file using Edge Store
             const res = await edgestore.publicFiles.upload({
@@ -43,29 +44,39 @@ const Details = () => {
                     console.log("Upload progress:", progress);
                 },
             });
-    
+
             // Get the uploaded image URL
             const imageUrl = res.url; // Assuming 'res.url' contains the uploaded file's URL
             console.log("Uploaded image URL:", imageUrl);
-    
+
             // Step 2: Submit the form data along with the image URL
             const response = await axios.post("/api/Details", {
                 ...data,
                 imageUrl, // Include the image URL
             });
-    
+
             console.log(response);
             toast.success("Details uploaded successfully");
-            
+
             // Redirect to the /appointment page
-            router.push("/appointment"); // Add this line for redirect
+            router.push("/appointment");
 
         } catch (error: any) {
             console.log(error);
             toast.error("Something went wrong");
         }
     };
-    
+
+    // Define the type for the form here
+    interface MedicalInfoForm {
+        dob: string;
+        gender: string;
+        // Add any other fields needed
+        insuranceProvider?: string;
+        pastMedicalHistory?: string;
+        // Add other fields...
+    }
+
     return (
         <div className="min-h-screen w-full flex flex-col lg:flex-row justify-between bg-gradient-to-r from-gray-100 to-blue-50 pb-20">
             {/* Form Section */}

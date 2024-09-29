@@ -12,8 +12,8 @@ interface SigninRequestBody {
 
 export const POST = async (req: NextRequest) => {
   console.log("hello");
-  
-  await dbConnect(); 
+
+  await dbConnect();
 
   try {
     const { email, password }: SigninRequestBody = await req.json();
@@ -35,23 +35,29 @@ export const POST = async (req: NextRequest) => {
     }
 
     // Generate JWT token
-    const token = await new SignJWT({ userId: user._id, email: user.email, isComplete: user.isComplete, isAdmin: user.isAdmin, username: user.name })
+    const token = await new SignJWT({
+      userId: user._id,
+      email: user.email,
+      isComplete: user.isComplete,
+      isAdmin: user.isAdmin,
+      username: user.name,
+    })
       .setProtectedHeader({ alg: 'HS256' })
-      .setExpirationTime('1h') 
-      .sign(new TextEncoder().encode(process.env.JWT_SECRET)); 
+      .setExpirationTime('1h')
+      .sign(new TextEncoder().encode(process.env.JWT_SECRET));
 
     // Set cookie with token
     cookies().set('token', token, {
       httpOnly: true,
       sameSite: 'strict',
-      maxAge: 3600, 
+      maxAge: 3600,
       path: '/',
     });
 
-    const { password: _, ...userData } = user.toObject(); // Using _ to ignore the password is acceptable
+    const { password: ignoredPassword, ...userData } = user.toObject(); // Changed variable name
     return NextResponse.json({ message: 'Sign-in successful', user: userData }, { status: 200 });
   } catch (error) {
-    console.error('Signin error:', error); 
+    console.error('Signin error:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 };
