@@ -54,8 +54,9 @@ export const POST = async (req: NextRequest) => {
       path: '/',
     });
 
-    const { password: ignoredPassword, ...userData } = user.toObject(); // Changed variable name
-    return NextResponse.json({ message: 'Sign-in successful', user: userData }, { status: 200 });
+     // Remove password from user data
+
+    return NextResponse.json({ message: 'Sign-in successful', user }, { status: 200 });
   } catch (error) {
     console.error('Signin error:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
