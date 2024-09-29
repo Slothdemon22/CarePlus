@@ -19,9 +19,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 
-export default function DateTimePicker() {
+export interface DateTimePickerProps {
+  onDateChange: (date: Date | undefined) => void;
+}
+
+export default function DateTimePicker({ onDateChange }: DateTimePickerProps) {
   const [date, setDate] = React.useState<Date | undefined>(undefined);
   const [time, setTime] = React.useState<string | undefined>(undefined);
 
@@ -38,6 +41,22 @@ export default function DateTimePicker() {
     return options;
   }, []);
 
+  // Handle date and time changes together
+  const handleDateChange = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    onDateChange(selectedDate); // Pass date up to parent component
+  };
+
+  const handleTimeChange = (selectedTime: string) => {
+    setTime(selectedTime);
+    if (date) {
+      const newDateTime = new Date(date);
+      const [hours, minutes] = selectedTime.split(":").map(Number);
+      newDateTime.setHours(hours, minutes);
+      onDateChange(newDateTime); // Update date with selected time and pass to parent
+    }
+  };
+
   return (
     <div className="w-full">
       <Popover>
@@ -46,12 +65,12 @@ export default function DateTimePicker() {
             variant={"outline"}
             className={cn(
               "w-full justify-start text-left font-normal",
-              !date && "text-muted-foreground"
+              !date && !time && "text-muted-foreground"
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {date && time ? (
-              format(date, "PPP") + " " + time
+              format(date, "PPP") + " at " + time
             ) : (
               <span>Pick a date and time</span>
             )}
@@ -61,14 +80,11 @@ export default function DateTimePicker() {
           <Calendar
             mode="single"
             selected={date}
-            onSelect={setDate}
+            onSelect={handleDateChange}
             initialFocus
           />
           <div className="p-3 border-t border-border">
-            <Select
-              onValueChange={(value) => setTime(value)}
-              value={time}
-            >
+            <Select onValueChange={handleTimeChange} value={time}>
               <SelectTrigger>
                 <SelectValue placeholder="Select a time" />
               </SelectTrigger>

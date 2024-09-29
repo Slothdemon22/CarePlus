@@ -1,228 +1,168 @@
-// "use client"
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-// import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-// import { Badge } from "@/components/ui/badge"
-// import { motion } from "framer-motion"
+"use client";
+import React, { useEffect, useState } from 'react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
+import { ChevronDownIcon } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
 
-// const patients = [
-//   {
-//     name: "John Doe",
-//     age: 45,
-//     illness: "Pneumonia",
-//     appointmentDate: "2023-07-05",
-//     doctor: "Dr. Sarah Johnson",
-//     status: "Critical",
-//   },
-//   {
-//     name: "Jane Smith",
-//     age: 32,
-//     illness: "Appendicitis",
-//     appointmentDate: "2023-07-08",
-//     doctor: "Dr. Michael Chen",
-//     status: "Stable",
-//   },
-//   {
-//     name: "Robert Johnson",
-//     age: 58,
-//     illness: "Hypertension",
-//     appointmentDate: "2023-07-10",
-//     doctor: "Dr. Emily Wong",
-//     status: "Improving",
-//   },
-//   {
-//     name: "Emily Brown",
-//     age: 27,
-//     illness: "Migraine",
-//     appointmentDate: "2023-07-12",
-//     doctor: "Dr. David Lee",
-//     status: "Stable",
-//   },
-//   {
-//     name: "Michael Wilson",
-//     age: 52,
-//     illness: "Diabetes",
-//     appointmentDate: "2023-07-15",
-//     doctor: "Dr. Lisa Patel",
-//     status: "Monitoring",
-//     },
-//     {
-//         name: "Robert Johnson",
-//         age: 58,
-//         illness: "Hypertension",
-//         appointmentDate: "2023-07-10",
-//         doctor: "Dr. Emily Wong",
-//         status: "Improving",
-//     },
-//     {
-//         name: "Robert Johnson",
-//         age: 58,
-//         illness: "Hypertension",
-//         appointmentDate: "2023-07-10",
-//         doctor: "Dr. Emily Wong",
-//         status: "Improving",
-//     },
-//     {
-//         name: "Robert Johnson",
-//         age: 58,
-//         illness: "Hypertension",
-//         appointmentDate: "2023-07-10",
-//         doctor: "Dr. Emily Wong",
-//         status: "Improving",
-//     },
-//     {
-//         name: "Michael Wilson",
-//         age: 52,
-//         illness: "Diabetes",
-//         appointmentDate: "2023-07-15",
-//         doctor: "Dr. Lisa Patel",
-//         status: "Monitoring",
-//     },
-//     {
-//         name: "Michael Wilson",
-//         age: 52,
-//         illness: "Diabetes",
-//         appointmentDate: "2023-07-15",
-//         doctor: "Dr. Lisa Patel",
-//         status: "Monitoring",
-//     },
-//     {
-//         name: "Michael Wilson",
-//         age: 52,
-//         illness: "Diabetes",
-//         appointmentDate: "2023-07-15",
-//         doctor: "Dr. Lisa Patel",
-//         status: "Monitoring",
-//         },
-// ]
+type Appointment = {
+  id: string; // Changed from number to string to match the API response
+  patientName: string;
+  dateTime: string;
+  doctorName: string; // Ensure this maps correctly to your API response
+  status: 'pending' | 'approved' | 'cancelled';
+  details: string;
+  comments: string;
+};
 
-// const statusColors:{[key:string]:string} = {
-//   Critical: "bg-red-500",
-//   Stable: "bg-green-500",
-//   Improving: "bg-blue-500",
-//   Monitoring: "bg-yellow-500",
-// }
+const initialAppointments: Appointment[] = []; // Initialize as an empty array
 
-// export default function EnhancedPatientTable() {
-//   return (
-//     <Card className="w-full max-w-4xl mx-auto overflow-hidden bg-gradient-to-br my-20 from-purple-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 shadow-xl">
-//       <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-6">
-//         <CardTitle className="text-3xl font-bold text-center text-white">
-//           Patient Management
-//         </CardTitle>
-//       </CardHeader>
-//       <CardContent className="p-6">
-//         <Table>
-//           <TableHeader>
-//             <TableRow>
-//               <TableHead className="w-[200px] text-lg font-semibold text-gray-700 dark:text-gray-300">Name</TableHead>
-//               <TableHead className="text-right text-lg font-semibold text-gray-700 dark:text-gray-300">Age</TableHead>
-//               <TableHead className="text-lg font-semibold text-gray-700 dark:text-gray-300">Illness</TableHead>
-//               <TableHead className="text-lg font-semibold text-gray-700 dark:text-gray-300">Appointment</TableHead>
-//               <TableHead className="text-lg font-semibold text-gray-700 dark:text-gray-300">Doctor</TableHead>
-//               <TableHead className="text-lg font-semibold text-gray-700 dark:text-gray-300">Status</TableHead>
-//             </TableRow>
-//           </TableHeader>
-//           <TableBody>
-//             {patients.map((patient, index) => (
-//               <motion.tr
-//                 key={patient.name}
-//                 className="hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors duration-200"
-//                 initial={{ opacity: 0, y: 20 }}
-//                 animate={{ opacity: 1, y: 0 }}
-//                 transition={{ duration: 0.3, delay: index * 0.1 }}
-//               >
-//                 <TableCell className="font-medium text-gray-900 dark:text-gray-100">{patient.name}</TableCell>
-//                 <TableCell className="text-right text-gray-600 dark:text-gray-400">{patient.age}</TableCell>
-//                 <TableCell className="text-gray-600 dark:text-gray-400">{patient.illness}</TableCell>
-//                 <TableCell className="text-gray-600 dark:text-gray-400">{patient.appointmentDate}</TableCell>
-//                 <TableCell className="text-gray-600 dark:text-gray-400">{patient.doctor}</TableCell>
-//                 <TableCell>
-//                   <Badge className={`${statusColors[patient.status]} text-white`}>{patient.status}</Badge>
-//                 </TableCell>
-//               </motion.tr>
-//             ))}
-//           </TableBody>
-//         </Table>
-//       </CardContent>
-//     </Card>
-//   )
-// }
-"use client"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { motion } from "framer-motion"
+export default function AppointmentTable() {
+  const [appointments, setAppointments] = useState<Appointment[]>(initialAppointments);
+  const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({}); // Updated key type to string
 
-const transactions = [
-  {
-    name: "John Doe",
-    date: "2023-07-05",
-    amount: 150.00,
-    doctor: "Dr. Sarah Johnson",
-  },
-  {
-    name: "Jane Smith",
-    date: "2023-07-08",
-    amount: 200.00,
-    doctor: "Dr. Michael Chen",
-  },
-  {
-    name: "Robert Johnson",
-    date: "2023-07-10",
-    amount: 175.00,
-    doctor: "Dr. Emily Wong",
-  },
-  {
-    name: "Emily Brown",
-    date: "2023-07-12",
-    amount: 125.00,
-    doctor: "Dr. David Lee",
-  },
-  {
-    name: "Michael Wilson",
-    date: "2023-07-15",
-    amount: 225.00,
-    doctor: "Dr. Lisa Patel",
-  },
-]
+  const fetchAppointments = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/api/getAppoinments');
+      console.log(response.data.data);
+      // Map the response data to the correct structure
+      if (Array.isArray(response.data.data)) {
+        const formattedAppointments = response.data.data.map((appointment: any) => ({
+          id: appointment._id, // Use _id for the appointment ID
+          patientName: appointment.
+          userName || "Unknown Patient", // Use the correct field
+          dateTime: appointment.dateTime,
+          doctorName: appointment.doctor, // Get doctor's name from 'doctor' field
+          status: appointment.status,
+          details: appointment.appointmentReason || "No details provided.", // Use appointmentReason if available
+          comments: appointment.comments || "No comments provided.", // Use comments if available
+        }));
+        setAppointments(formattedAppointments);
+      } else {
+        console.error("Expected an array but received:", response.data.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-export default function TransactionTable() {
+  useEffect(() => {
+    fetchAppointments(); // Fetch appointments when component mounts
+  }, []);
+
+  const handleStatusChange = (id: string, newStatus: Appointment['status']) => {
+    setAppointments(appointments.map(appointment =>
+      appointment.id === id ? { ...appointment, status: newStatus } : appointment
+    ));
+  };
+
+  const getStatusColor = (status: Appointment['status']) => {
+    switch (status) {
+      case 'pending': return 'bg-yellow-500';
+      case 'approved': return 'bg-green-500';
+      case 'cancelled': return 'bg-red-500';
+      default: return 'bg-gray-500';
+    }
+  };
+
+  const toggleOpen = (id: string) => {
+    setOpenStates(prevStates => ({
+      ...prevStates,
+      [id]: !prevStates[id],
+    }));
+  };
+
   return (
-    <Card className="w-full max-w-4xl m-auto overflow-hidden bg-white dark:bg-gray-800 shadow-xl">
-      <CardHeader className="bg-gradient-to-r from-green-600 to-green-800 text-white p-6">
-        <CardTitle className="text-3xl font-bold text-center text-white">
-          Payment Transactions
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-6">
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-6">Healthcare Dashboard - Appointments</h1>
+      <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-[200px] text-lg font-semibold text-gray-700 dark:text-gray-300">Name</TableHead>
-              <TableHead className="text-lg font-semibold text-gray-700 dark:text-gray-300">Date</TableHead>
-              <TableHead className="text-right text-lg font-semibold text-gray-700 dark:text-gray-300">Amount</TableHead>
-              <TableHead className="text-lg font-semibold text-gray-700 dark:text-gray-300">Doctor</TableHead>
+            <TableRow className="border-b-2 border-gray-200">
+              <TableHead className="py-4 px-6">Patient Name</TableHead>
+              <TableHead className="py-4 px-6">Date & Time</TableHead>
+              <TableHead className="py-4 px-6">Doctor Name</TableHead>
+              <TableHead className="py-4 px-6">Status</TableHead>
+              <TableHead className="py-4 px-6">Action</TableHead>
+              <TableHead className="py-4 px-6">Details</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {transactions.map((transaction, index) => (
-              <motion.tr
-                key={`${transaction.name}-${transaction.date}`}
-                className="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-              >
-                <TableCell className="font-medium text-gray-900 dark:text-gray-100">{transaction.name}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-400">{transaction.date}</TableCell>
-                <TableCell className="text-right text-gray-600 dark:text-gray-400">
-                  ${transaction.amount.toFixed(2)}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-400">{transaction.doctor}</TableCell>
-              </motion.tr>
+            {appointments.map((appointment) => (
+              <React.Fragment key={appointment.id}>
+                <TableRow className="border-b border-gray-200">
+                  <TableCell className="py-6 px-6">{appointment.patientName}</TableCell>
+                  <TableCell className="py-6 px-6">{new Date(appointment.dateTime).toLocaleString()}</TableCell>
+                  <TableCell className="py-6 px-6">{appointment.doctorName}</TableCell>
+                  <TableCell className="py-6 px-6">
+                    <Badge className={`${getStatusColor(appointment.status)} text-white px-3 py-1 rounded-full`}>
+                      {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="py-6 px-6">
+                    <Select
+                      onValueChange={(value) => handleStatusChange(appointment.id, value as Appointment['status'])}
+                      defaultValue={appointment.status}
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Change status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pending">Pending</SelectItem>
+                        <SelectItem value="approved">Approved</SelectItem>
+                        <SelectItem value="cancelled">Cancelled</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </TableCell>
+                  <TableCell className="py-6 px-6">
+                    <Collapsible open={openStates[appointment.id]} onOpenChange={() => toggleOpen(appointment.id)}>
+                      <CollapsibleTrigger asChild>
+                        <Button variant="ghost" size="sm" className="w-full">
+                          <motion.div
+                            initial={false}
+                            animate={{ rotate: openStates[appointment.id] ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <ChevronDownIcon className="h-4 w-4" />
+                          </motion.div>
+                          <span className="sr-only">Toggle details</span>
+                        </Button>
+                      </CollapsibleTrigger>
+                    </Collapsible>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell colSpan={6} className="p-0">
+                    <AnimatePresence>
+                      {openStates[appointment.id] && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <Collapsible open={openStates[appointment.id]} onOpenChange={() => toggleOpen(appointment.id)}>
+                            <CollapsibleContent className="px-6 py-4 bg-gray-50">
+                              <h4 className="text-sm font-semibold mb-2">Appointment Details:</h4>
+                              <p className="text-sm mb-2">{appointment.details}</p>
+                              <h4 className="text-sm font-semibold mb-2">Comments:</h4>
+                              <p className="text-sm">{appointment.comments}</p>
+                            </CollapsibleContent>
+                          </Collapsible>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </TableCell>
+                </TableRow>
+              </React.Fragment>
             ))}
           </TableBody>
         </Table>
-      </CardContent>
-    </Card>
-  )
+      </div>
+    </div>
+  );
 }

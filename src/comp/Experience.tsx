@@ -27,7 +27,7 @@ const Experience = () => {
                   </p>
                 </div>
                 <div className="play h-[30%] flex items-center ml-20 mt-4 md:m-6">
-                  <img src="arroww.png" alt="" className="w-[45px] md:max-w-[50px]" />
+                 
                 </div>
               </div>
               <div className="right-pic w-[50%]">

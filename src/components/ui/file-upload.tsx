@@ -24,7 +24,7 @@ const secondaryVariant = {
   },
 };
 
-export const FileUpload = ({ onChange }: { onChange?: (file: File | null) => void }) => {
+export const FileUpload = ({ onChange }: { onChange: (file: File | null) => void }) => {
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -32,7 +32,10 @@ export const FileUpload = ({ onChange }: { onChange?: (file: File | null) => voi
     if (newFiles.length > 0) {
       const selectedFile = newFiles[0];
       setFile(selectedFile);
-      onChange && onChange(selectedFile);
+      onChange(selectedFile); // Inform the parent about the file
+    } else {
+      setFile(null);
+      onChange(null); // Inform the parent that no file is selected
     }
   };
 

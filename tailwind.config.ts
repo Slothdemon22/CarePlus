@@ -3,9 +3,10 @@ import type { Config } from "tailwindcss";
 const config: Config = {
   darkMode: ["class"],
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',        // Include all pages (if outside src)
+    './components/**/*.{js,ts,jsx,tsx,mdx}',   // Include all components (if outside src)
+    './app/**/*.{js,ts,jsx,tsx,mdx}',          // Include app directory (for Next.js 13+)
+    './src/**/*.{js,ts,jsx,tsx,mdx}',  
   ],
   theme: {
     extend: {

@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "./comp/Navbar";
-import Footer from "./comp/Footer";
+import Navbar from "../comp/Navbar";
+import Footer from "../comp/Footer";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { EdgeStoreProvider } from '../lib/edgestore';
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -30,7 +33,8 @@ export default function RootLayout({
         className={` font-sans `}
       >
         <Navbar/>
-        {children}
+        <EdgeStoreProvider>{children}</EdgeStoreProvider>
+        <ToastContainer />
         <Footer/>
       </body>
     </html>

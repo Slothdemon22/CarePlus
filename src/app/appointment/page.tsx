@@ -1,19 +1,29 @@
 "use client";
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { FaStethoscope } from "react-icons/fa";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, Loader } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
-import DateTimePicker from "@/app/comp/DateTimePicker"; // Adjust the import path accordingly
+import DateTimePicker from "@/comp/DateTimePicker"; // Adjust the import path accordingly
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { toast } from "react-toastify";
+import axios from "axios";
+// Define the Zod schema for validation
+const appointmentSchema = z.object({
+  doctor: z.string().nonempty("Please select a doctor."),
+  appointmentReason: z.string().nonempty("Please enter the reason for the appointment."),
+  comments: z.string().optional(),
+});
 
 const doctors = [
   {
@@ -36,24 +46,58 @@ const doctors = [
     label: "Dr. Brown",
     image: "/d5.jpeg",
   },
-  {
-    value: "dr-jones",
-    label: "Dr. Jones",
-    image: "/placeholder.svg?height=40&width=40",
-  },
 ];
 
-export default function DoctorSelect() {
-  const [value, setValue] = useState("");
-  const [appointmentReason, setAppointmentReason] = useState("");
-  const [comments, setComments] = useState("");
+type Doctor = typeof doctors[number]; // Type for the doctors array
 
-  const selectedDoctor = doctors.find((doctor) => doctor.value === value);
+export default function DoctorSelect() {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(appointmentSchema),
+  });
+
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | undefined>();
+  const [dob, setDob] = useState<Date | undefined>();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const onSubmit = async (data: any) => {
+    if (!dob) {
+      toast.error("Please enter Appointment time");
+      return;
+    }
+
+    // Set loading state to true when form submission starts
+    setLoading(true);
+
+    try {
+      console.log(dob);
+      console.log("Form submitted:", data);
+
+      // Simulate API call or form submission
+      const res = await axios.post("/api/appointment", { data, dateTime: dob });
+
+      console.log(res);
+
+      // Handle form submission logic here (e.g., send data to API)
+      toast.success("Appointment submitted successfully!");
+
+      // Reset form or handle any further logic
+    } catch (error) {
+      toast.error("Failed to submit appointment.");
+    } finally {
+      // Set loading state back to false when submission ends
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col lg:flex-row justify-between w-full h-auto gap-6">
       {/* Main content */}
-      <div className="w-full lg:w-3/4 p-4">
+      <div className="w-full lg:w-2/3 p-4">
         {/* Heading and Introduction */}
         <h1 className="text-3xl text-left flex items-center gap-2 mx-0">
           <FaStethoscope />
@@ -68,8 +112,15 @@ export default function DoctorSelect() {
         <h1 className="text-3xl text-left px-2 mt-12">Appointment Details</h1>
 
         {/* Doctor Selection */}
-        <div className="mt-6 w-full max-w-5xl lg:max-w-6xl"> {/* Adjusted width for larger screens */}
-          <Select onValueChange={setValue}>
+        <div className="mt-6 w-full">
+          <Select
+            onValueChange={(value) => {
+              const doctor = doctors.find((doc) => doc.value === value);
+              setValue("doctor", value);
+              setSelectedDoctor(doctor);
+            }}
+            disabled={loading} // Disable select if loading
+          >
             <SelectTrigger
               className={cn(
                 "w-full flex justify-between items-center",
@@ -78,17 +129,17 @@ export default function DoctorSelect() {
                 "transition-all duration-150 ease-in-out bg-white"
               )}
             >
-              {value ? (
+              {selectedDoctor ? (
                 <div className="flex items-center gap-2">
                   <Avatar className="h-8 w-8">
                     <AvatarImage
-                      src={selectedDoctor?.image}
-                      alt={selectedDoctor?.label}
+                      src={selectedDoctor.image}
+                      alt={selectedDoctor.label}
                     />
-                    <AvatarFallback>{selectedDoctor?.label[0]}</AvatarFallback>
+                    <AvatarFallback>{selectedDoctor.label[0]}</AvatarFallback>
                   </Avatar>
                   <span className="font-medium text-gray-700">
-                    {selectedDoctor?.label}
+                    {selectedDoctor.label}
                   </span>
                 </div>
               ) : (
@@ -115,37 +166,59 @@ export default function DoctorSelect() {
               ))}
             </SelectContent>
           </Select>
+          {errors.doctor?.message && (
+            <p className="text-red-500 mt-2 min-h-[1.25rem]">
+              {errors.doctor.message as string}
+            </p>
+          )}
         </div>
 
         {/* Expected Date and Time Picker */}
-        <div className="mt-6 w-full max-w-5xl lg:max-w-6xl"> {/* Adjusted width for larger screens */}
-          <DateTimePicker />
+        <div className="mt-6 w-full">
+          <DateTimePicker onDateChange={setDob}  /> {/* Pass loading prop */}
         </div>
 
         {/* Appointment Reason and Comments */}
-              <div className="w-fill flex gap-4 lg:flex-row flex-col">
-              <div className="mt-6 w-full max-w-5xl lg:max-w-6xl"> {/* Adjusted width for larger screens */}
-          <label className="block text-gray-700 text-lg mb-2">
-            Appointment Reason
-          </label>
-          <Textarea
-            value={appointmentReason}
-            onChange={(e) => setAppointmentReason(e.target.value)}
-            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Reason for appointment"
-          />
+        <div className="w-fill flex gap-4 lg:flex-row flex-col">
+          <div className="mt-6 w-full max-w-5xl lg:max-w-6xl">
+            <label className="block text-gray-700 text-lg mb-2">
+              Appointment Reason
+            </label>
+            <Textarea
+              {...register("appointmentReason")}
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Reason for appointment"
+              disabled={loading} // Disable textarea if loading
+            />
+            {errors.appointmentReason?.message && (
+              <p className="text-red-500 mt-2 min-h-[1.25rem]">
+                {errors.appointmentReason.message as string}
+              </p>
+            )}
+          </div>
+
+          <div className="mt-6 w-full max-w-5xl lg:max-w-6xl">
+            <label className="block text-gray-700 text-lg mb-2">Comments</label>
+            <Textarea
+              {...register("comments")}
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Additional comments"
+              disabled={loading} // Disable textarea if loading
+            />
+          </div>
         </div>
 
-        <div className="mt-6 w-full max-w-5xl lg:max-w-6xl"> {/* Adjusted width for larger screens */}
-          <label className="block text-gray-700 text-lg mb-2">Comments</label>
-          <Textarea
-            value={comments}
-            onChange={(e) => setComments(e.target.value)}
-            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Additional comments"
-          />
-        </div>
-            </div>
+        {/* Submit Button */}
+        <button
+          onClick={handleSubmit(onSubmit)}
+          className={cn(
+            "mt-6 w-full bg-blue-600 text-white rounded-md p-2 hover:bg-blue-700 transition-colors duration-150",
+            loading && "opacity-50 cursor-not-allowed" // Add visual feedback when loading
+          )}
+          disabled={loading} // Disable button if loading
+        >
+          {loading ? <Loader className="animate-spin" /> : "Submit Appointment"}
+        </button>
       </div>
 
       {/* Side Image */}
