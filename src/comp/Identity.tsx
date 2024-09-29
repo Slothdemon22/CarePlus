@@ -1,12 +1,13 @@
-import React from 'react'; // Removed useState since it's not used
+import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { FileUpload } from '@/components/ui/file-upload';
+import { UseFormRegister, FieldErrors, FieldError } from 'react-hook-form';
 
-// Define a type for props instead of using 'any'
+// Define a type for props
 interface IdentityProps {
-  register: any; // You can specify a more precise type if known
-  errors: Record<string, any>; // Define an appropriate structure for errors
+  register: UseFormRegister<any>; // Use the actual form data type if known
+  errors: FieldErrors; // Use FieldErrors type from react-hook-form
   setFile: (file: File | null) => void;
   file: File | null;
 }
@@ -33,7 +34,11 @@ const Identity: React.FC<IdentityProps> = ({ register, errors, setFile, file }) 
           className="w-full border rounded-md"
         />
         <div className="min-h-[24px] mt-1">
-          {errors.idNumber && <p className="text-red-500 text-sm">{errors.idNumber.message}</p>}
+          {errors.idNumber && (
+            <p className="text-red-500 text-sm">
+              {(errors.idNumber as FieldError).message}
+            </p>
+          )}
         </div>
       </div>
 
@@ -48,7 +53,7 @@ const Identity: React.FC<IdentityProps> = ({ register, errors, setFile, file }) 
           />
         </div>
         <div className="min-h-[24px] mt-1">
-          {file === null && <p className="text-red-500 text-sm">File upload is required.</p>} {/* Custom error message */}
+          {file === null && <p className="text-red-500 text-sm">File upload is required.</p>}
         </div>
       </div>
 
@@ -67,7 +72,11 @@ const Identity: React.FC<IdentityProps> = ({ register, errors, setFile, file }) 
           <Label htmlFor="otherConsent" className="text-sm text-gray-700">I agree to the additional terms and conditions.</Label>
         </div>
         <div className="min-h-[24px] mt-1">
-          {errors.otherConsent && <p className="text-red-500 text-sm">{errors.otherConsent.message}</p>}
+          {errors.otherConsent && (
+            <p className="text-red-500 text-sm">
+              {(errors.otherConsent as FieldError).message}
+            </p>
+          )}
         </div>
       </div>
     </div>
