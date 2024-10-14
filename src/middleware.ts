@@ -34,7 +34,7 @@ export async function middleware(req: NextRequest) {
       // console.log(payload.isComplete, "h");
       if (!payload.isComplete) {
         // If `isComplete` is false or not present, redirect to `/Details`
-        return 
+        return NextResponse.redirect(new URL("/Details", req.url)); 
       }
     }
 
@@ -42,7 +42,7 @@ export async function middleware(req: NextRequest) {
     if (pathname === "/Dashboard") {
       if (payload.email !== "www.basilslothdemon@gmail.com") {
         // Redirect to home if the email doesn't match the admin's email
-        return 
+        return NextResponse.redirect(new URL("/", req.url));
       }
     }
 
@@ -56,5 +56,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/Details", "/", "/appointment", "/Dashboard"],
+  matcher: ["/Details", "/appointment", "/Dashboard"],
 };
