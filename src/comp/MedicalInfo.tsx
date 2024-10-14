@@ -25,7 +25,7 @@ export interface MedicalInfoForm {
   register: UseFormRegister<MedicalInfoForm>;
   errors: FieldErrors<MedicalInfoForm>
  }
-const MedicalInfo = ({ register, errors }:props) => {
+const MedicalInfo = ({ register, errors }:any) => {
   return (
     <div className='w-full'>
       <h1 className='text-3xl text-left px-2 mt-12'>Medical Information</h1>

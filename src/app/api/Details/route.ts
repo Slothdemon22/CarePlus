@@ -10,12 +10,18 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    // Get token from cookies and verify it
-    const token = req.cookies.get("token") as any;
+    // Get the token from cookies
+    const tokenCookie = req.cookies.get("token");
+    if (!tokenCookie || !tokenCookie.value) {
+      return NextResponse.json({ success: false, message: "Authentication token is missing" }, { status: 401 });
+    }
 
     // Verify the token
-    const { payload } = await jwtVerify(token?.value, new TextEncoder().encode(process.env.JWT_SECRET));
+    const { payload } = await jwtVerify(tokenCookie.value, new TextEncoder().encode(process.env.JWT_SECRET));
     const userId = payload.userId; // Extract userId from the token payload
+    if (!userId) {
+      return NextResponse.json({ success: false, message: "Invalid token payload" }, { status: 400 });
+    }
 
     // Destructure the required fields and set default values for optional fields
     const {
@@ -53,7 +59,7 @@ export async function POST(req: NextRequest) {
       idType,
       idNumber,
       documentUpload,
-      User: userId // Associate the user from the token
+      user: userId // Associate the user from the token
     });
 
     console.log("Saved details:", newDetails);
@@ -81,6 +87,6 @@ export async function POST(req: NextRequest) {
 
   } catch (error) {
     console.error("Error saving details:", error);
-    return NextResponse.json({ success: false, message: "Failed to save details", error }, { status: 500 });
+    return NextResponse.json({ success: false, message: "Failed to save details",error }, { status: 500 });
   }
 }

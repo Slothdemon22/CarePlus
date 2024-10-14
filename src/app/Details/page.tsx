@@ -6,7 +6,7 @@ import MedicalInfo from "../../comp/MedicalInfo";
 import Identity from "../../comp/Identity";
 import Image from "next/image";
 import { FaStethoscope } from "react-icons/fa";
-import { useForm, UseFormRegister, FieldValues } from "react-hook-form";
+import { useForm} from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import axios from "axios";

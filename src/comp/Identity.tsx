@@ -2,21 +2,11 @@ import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { FileUpload } from '@/components/ui/file-upload';
-import { UseFormRegister, FieldErrors, FieldError } from 'react-hook-form';
+import { FieldError } from 'react-hook-form';
 
-interface FormData {
-  idNumber: string;
-  otherConsent: boolean;
-}
 
-interface IdentityProps {
-  register: UseFormRegister<FormData>;
-  errors: FieldErrors<FormData>;
-  setFile: (file: File | null) => void;
-  file: File | null;
-}
 
-const Identity: React.FC<IdentityProps> = ({ register, errors, setFile, file }) => {
+const Identity = ({ register, errors, setFile, file }:any) => {
   const handleFileChange = (file: File | null) => {
     setFile(file);
   };
