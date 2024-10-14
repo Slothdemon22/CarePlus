@@ -6,16 +6,17 @@ import MedicalInfo from "../../comp/MedicalInfo";
 import Identity from "../../comp/Identity";
 import Image from "next/image";
 import { FaStethoscope } from "react-icons/fa";
-import { useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useEdgeStore } from "@/lib/edgestore";
+import { CombinedFormValues } from "@/types/combinedForm";
 
 const Details = () => {
     const { edgestore } = useEdgeStore();
     const [file, setFile] = React.useState<File | null>(null);
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<MedicalInfoForm>({
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<CombinedFormValues>({
         defaultValues: {
             dob: "",
             gender: "",
@@ -25,7 +26,7 @@ const Details = () => {
 
     const router = useRouter();
 
-    const onSubmit = async (data: MedicalInfoForm) => {
+    const onSubmit = async (data: CombinedFormValues) => { // Use CombinedFormValues for type
         if (file === null) {
             toast.error("Please upload an image");
             return;
@@ -66,16 +67,6 @@ const Details = () => {
             toast.error("Something went wrong");
         }
     };
-
-    // Define the type for the form here
-    interface MedicalInfoForm {
-        dob: string;
-        gender: string;
-        // Add any other fields needed
-        insuranceProvider?: string;
-        pastMedicalHistory?: string;
-        // Add other fields...
-    }
 
     return (
         <div className="min-h-screen w-full flex flex-col lg:flex-row justify-between bg-gradient-to-r from-gray-100 to-blue-50 pb-20">

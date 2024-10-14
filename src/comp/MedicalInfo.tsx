@@ -1,31 +1,17 @@
-// components/MedicalInfo.tsx
-
 import React from 'react';
 import { FaUserShield, FaFileAlt, FaList, FaPills, FaClipboard } from 'react-icons/fa';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
+import { CombinedFormValues } from '@/types/combinedForm'; // Import the combined form type
 
-// Define the props for the component
-// interface MedicalInfoProps {
-//   register: UseFormRegister<MedicalInfoForm>;
-//   errors: FieldErrors<MedicalInfoForm>;
-// }
-
-export interface MedicalInfoForm {
-  insuranceProvider: string;
-  insurancePolicy: string;
-  allergies?: string;
-  medications?: string;
-  familyMedicalHistory?: string;
-  pastMedicalHistory?: string;
+interface MedicalInfoProps {
+  register: UseFormRegister<CombinedFormValues>; // Use CombinedFormValues for the register
+  errors: FieldErrors<CombinedFormValues>; // Use CombinedFormValues for the errors
 }
- interface props {
-  register: UseFormRegister<MedicalInfoForm>;
-  errors: FieldErrors<MedicalInfoForm>
- }
-const MedicalInfo = ({ register, errors }:any) => {
+
+const MedicalInfo: React.FC<MedicalInfoProps> = ({ register, errors }) => {
   return (
     <div className='w-full'>
       <h1 className='text-3xl text-left px-2 mt-12'>Medical Information</h1>
@@ -44,7 +30,7 @@ const MedicalInfo = ({ register, errors }:any) => {
             className='pl-12 pr-3 w-full border rounded-md'
           />
           <div className='min-h-[24px] mt-1'>
-            {errors.insuranceProvider && <p className='text-red-500 text-sm'>{errors.insuranceProvider.message}</p>}
+            {errors.insuranceProvider && <p className='text-red-500 text-sm'>{errors.insuranceProvider?.message}</p>}
           </div>
         </div>
 
@@ -61,7 +47,7 @@ const MedicalInfo = ({ register, errors }:any) => {
             className='pl-12 pr-3 w-full border rounded-md'
           />
           <div className='min-h-[24px] mt-1'>
-            {errors.insurancePolicy && <p className='text-red-500 text-sm'>{errors.insurancePolicy.message}</p>}
+            {errors.insurancePolicy && <p className='text-red-500 text-sm'>{errors.insurancePolicy?.message}</p>}
           </div>
         </div>
       </div>
@@ -81,7 +67,7 @@ const MedicalInfo = ({ register, errors }:any) => {
             rows={3}
           />
           <div className='min-h-[24px] mt-1'>
-            {errors.allergies && <p className='text-red-500 text-sm'>{errors.allergies.message}</p>}
+            {errors.allergies && <p className='text-red-500 text-sm'>{errors.allergies?.message}</p>}
           </div>
         </div>
 
@@ -99,7 +85,7 @@ const MedicalInfo = ({ register, errors }:any) => {
             rows={3}
           />
           <div className='min-h-[24px] mt-1'>
-            {errors.medications && <p className='text-red-500 text-sm'>{errors.medications.message}</p>}
+            {errors.medications && <p className='text-red-500 text-sm'>{errors.medications?.message}</p>}
           </div>
         </div>
       </div>
@@ -119,7 +105,7 @@ const MedicalInfo = ({ register, errors }:any) => {
             rows={3}
           />
           <div className='min-h-[24px] mt-1'>
-            {errors.familyMedicalHistory && <p className='text-red-500 text-sm'>{errors.familyMedicalHistory.message}</p>}
+            {errors.familyMedicalHistory && <p className='text-red-500 text-sm'>{errors.familyMedicalHistory?.message}</p>}
           </div>
         </div>
 
@@ -137,7 +123,7 @@ const MedicalInfo = ({ register, errors }:any) => {
             rows={3}
           />
           <div className='min-h-[24px] mt-1'>
-            {errors.pastMedicalHistory && <p className='text-red-500 text-sm'>{errors.pastMedicalHistory.message}</p>}
+            {errors.pastMedicalHistory && <p className='text-red-500 text-sm'>{errors.pastMedicalHistory?.message}</p>}
           </div>
         </div>
       </div>

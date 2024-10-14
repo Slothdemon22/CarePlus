@@ -2,11 +2,19 @@ import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { FileUpload } from '@/components/ui/file-upload';
-import { FieldError } from 'react-hook-form';
+import { UseFormRegister, FieldErrors, FieldError } from 'react-hook-form';
+import { CombinedFormValues } from '@/types/combinedForm';
 
 
+interface IdentityProps {
+  register: UseFormRegister<CombinedFormValues>;
+  errors: FieldErrors<CombinedFormValues>;
+  setFile: (file: File | null) => void;
+  file: File | null;
+}
 
-const Identity = ({ register, errors, setFile, file }:any) => {
+
+const Identity: React.FC<IdentityProps> = ({ register, errors, setFile, file }) => {
   const handleFileChange = (file: File | null) => {
     setFile(file);
   };

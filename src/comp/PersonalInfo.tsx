@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-
+import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { IoPersonOutline, IoCall, IoCalendar } from "react-icons/io5";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
@@ -8,15 +8,18 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { CombinedFormValues } from "@/types/combinedForm";
 import { FaAddressCard, FaBriefcase } from "react-icons/fa";
 import { format } from "date-fns";
 
 // Define the form data interface
+interface PersonalInfoProps {
+  register: UseFormRegister<CombinedFormValues>;
+  errors: FieldErrors<CombinedFormValues>;
+  setValue: UseFormSetValue<CombinedFormValues>;
+}
 
-
-// Define the component props with correct types
-
-const PersonalInfo= ({ register, errors, setValue }:any) => {
+const PersonalInfo: React.FC<PersonalInfoProps> = ({ register, errors, setValue }) => {
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(undefined);
 
   const handleDateChange = (date: Date | undefined) => {
