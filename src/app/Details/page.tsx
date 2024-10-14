@@ -62,7 +62,7 @@ const Details = () => {
             // Redirect to the /appointment page
             router.push("/appointment");
 
-        } catch (error: any) {
+        } catch (error) {
             console.log(error);
             toast.error("Something went wrong");
         }
