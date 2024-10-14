@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       comments,
       dateTime,
       User: userId, // Use the userId extracted from the token
-      userName, // Save the user's name from the token
+      // userName, // Save the user's name from the token
       status: "pending",
     });
 
