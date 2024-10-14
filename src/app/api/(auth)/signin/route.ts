@@ -25,6 +25,7 @@ export const POST = async (req: NextRequest) => {
 
     // Check if user exists
     const user = await User.findOne({ email });
+    console.log(user)
     if (!user) {
       return NextResponse.json({ message: 'Invalid email or password' }, { status: 401 });
     }
@@ -33,7 +34,7 @@ export const POST = async (req: NextRequest) => {
     if (!isMatch) {
       return NextResponse.json({ message: 'Invalid email or password' }, { status: 401 });
     }
-
+   console.log(user.name)
     // Generate JWT token
     const token = await new SignJWT({
       userId: user._id,
@@ -45,7 +46,7 @@ export const POST = async (req: NextRequest) => {
       .setProtectedHeader({ alg: 'HS256' })
       .setExpirationTime('1h')
       .sign(new TextEncoder().encode(process.env.JWT_SECRET));
-
+ console.log(token)
     // Set cookie with token
     cookies().set('token', token, {
       httpOnly: true,

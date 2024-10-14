@@ -16,11 +16,12 @@ export async function POST(req: NextRequest) {
     }
 
     const { payload } = await jwtVerify(token.value, new TextEncoder().encode(process.env.JWT_SECRET));
+   
 
     // Extract userId and name from the token payload
     const userId = payload.userId; // Adjust based on your token structure
     const userName = payload.username; // Assuming the token includes the user's name
-    console.log(userId, userName);
+    console.log(userId, "username",userName);
     if (!userId) {
       return NextResponse.json({ success: false, message: "User ID not found in token" }, { status: 401 });
     }
