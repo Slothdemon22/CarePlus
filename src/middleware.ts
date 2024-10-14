@@ -21,7 +21,7 @@ export async function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value; // Use optional chaining and assume it's a string | undefined
   if (!token) {
     // If no token is present, redirect to the home page
-    return NextResponse.redirect(new URL("/", req.url));
+    return 
   }
 
   try {
@@ -34,7 +34,7 @@ export async function middleware(req: NextRequest) {
       // console.log(payload.isComplete, "h");
       if (!payload.isComplete) {
         // If `isComplete` is false or not present, redirect to `/Details`
-        return NextResponse.redirect(new URL("/Details", req.url));
+        return 
       }
     }
 
@@ -42,7 +42,7 @@ export async function middleware(req: NextRequest) {
     if (pathname === "/Dashboard") {
       if (payload.email !== "www.basilslothdemon@gmail.com") {
         // Redirect to home if the email doesn't match the admin's email
-        return NextResponse.redirect(new URL("/", req.url));
+        return 
       }
     }
 
