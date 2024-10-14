@@ -226,14 +226,16 @@ export default function DoctorSelect() {
       </div>
 
       {/* Side Image */}
-      <div className="w-full lg:w-1/4 sticky top-16 right-0 h-auto hidden lg:block">
-        <Image
-          src="/side1.png" // Adjust the image path accordingly
-          alt="Side Image"
-          width={350}
-          height={500}
-          className="object-cover rounded-lg"
-        />
+      <div className="relative w-full lg:w-1/4 h-auto">
+        <div className="relative w-full h-full lg:h-auto flex justify-end">
+          <Image
+            src="/side1.png" // Adjust the image path accordingly
+            alt="Side Image"
+            width={350}
+            height={500}
+            className="object-cover rounded-lg"
+          />
+        </div>
       </div>
     </div>
   );

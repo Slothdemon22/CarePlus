@@ -36,11 +36,13 @@ const Details = () => {
             toast.error("Please enter your date of birth");
             return;
         }
+        console.log("gender",data.gender)
 
         try {
             // Step 1: Upload the file using Edge Store
             const res = await edgestore.publicFiles.upload({
                 file,
+
                 onProgressChange: (progress) => {
                     console.log("Upload progress:", progress);
                 },

@@ -9,6 +9,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
+    console.log(body);
 
     // Get the token from cookies
     const tokenCookie = req.cookies.get("token");
@@ -22,6 +23,7 @@ export async function POST(req: NextRequest) {
     if (!userId) {
       return NextResponse.json({ success: false, message: "Invalid token payload" }, { status: 400 });
     }
+    console.log(userId);
 
     // Destructure the required fields and set default values for optional fields
     const {
@@ -59,7 +61,7 @@ export async function POST(req: NextRequest) {
       idType,
       idNumber,
       documentUpload,
-      user: userId // Associate the user from the token
+      User: userId // Associate the user from the token
     });
 
     console.log("Saved details:", newDetails);
