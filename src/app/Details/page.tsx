@@ -60,7 +60,7 @@ const Details = () => {
             toast.success("Details uploaded successfully");
 
             // Redirect to the /appointment page
-           // router.push("/appointment");
+            router.push("/appointment");
 
         } catch (error) {
             console.log(error);
