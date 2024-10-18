@@ -49,7 +49,7 @@ const SignIn = () => {
             const res = await axios.post("/api/signin", data);
             console.log(res);
             toast.success("Sign-in successful!"); // Display success toast
-            router.push("/"); // Redirect after successful sign-in
+            window.location.href = "/"; // Redirect after successful sign-in
         } catch (error) {
             toast.error("Sign-in failed. Please try again."); // Display error toast
         } finally {

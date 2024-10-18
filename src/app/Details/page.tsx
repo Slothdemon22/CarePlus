@@ -65,7 +65,8 @@ const Details = () => {
 
         // Redirect to the /appointment page
         console.log("hello")
-      router.push("/appointment");
+        window.location.href = "/appointment";
+
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
