@@ -11,13 +11,13 @@ import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react"; // Import loader icon
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+
 import { useEdgeStore } from "@/lib/edgestore";
 import { CombinedFormValues } from "@/types/combinedForm";
 
 const Details = () => {
     const { edgestore } = useEdgeStore();
-    const router = useRouter();
+    
   const [file, setFile] = React.useState<File | null>(null);
   const [loading, setLoading] = useState(false); // Loading state
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<CombinedFormValues>({

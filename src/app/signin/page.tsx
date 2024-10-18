@@ -15,7 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useRouter } from "next/navigation"; // Move this import to the top
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useState } from "react";
@@ -33,7 +33,7 @@ type SignInFormData = z.infer<typeof signInSchema>;
 
 const SignIn = () => {
     const [loading, setLoading] = useState(false);
-    const router = useRouter(); // Move the useRouter hook here
+
     const {
         register,
         handleSubmit,
