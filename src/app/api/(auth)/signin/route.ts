@@ -4,6 +4,8 @@ import dbConnect from '@/lib/dbConnect';
 import User from '@/app/api/schema/user';
 import { SignJWT } from 'jose';
 import { cookies } from 'next/headers';
+import { Resend } from "resend";
+import EmailTemplate from '@/lib/EmailTemplate'; // Import your email template
 
 interface SigninRequestBody {
   email: string;
@@ -11,10 +13,8 @@ interface SigninRequestBody {
 }
 
 export const POST = async (req: NextRequest) => {
- 
-
   await dbConnect();
-
+  const resend = new Resend("re_7Efe9VUV_MNJcunLJG7kQycruNAhgf6RU");
   try {
     const { email, password }: SigninRequestBody = await req.json();
     console.log(email, password);
@@ -25,7 +25,7 @@ export const POST = async (req: NextRequest) => {
 
     // Check if user exists
     const user = await User.findOne({ email });
-    console.log(user)
+    console.log(user);
     if (!user) {
       return NextResponse.json({ message: 'Invalid email or password' }, { status: 401 });
     }
@@ -34,8 +34,10 @@ export const POST = async (req: NextRequest) => {
     if (!isMatch) {
       return NextResponse.json({ message: 'Invalid email or password' }, { status: 401 });
     }
-    console.log(user.name)
-    console.log("h",user.isComplete)
+
+    console.log(user.name);
+    console.log('h', user.isComplete);
+
     // Generate JWT token
     const token = await new SignJWT({
       userId: user._id,
@@ -47,7 +49,9 @@ export const POST = async (req: NextRequest) => {
       .setProtectedHeader({ alg: 'HS256' })
       .setExpirationTime('1h')
       .sign(new TextEncoder().encode(process.env.JWT_SECRET));
- console.log(token)
+    
+    console.log(token);
+
     // Set cookie with token
     cookies().set('token', token, {
       httpOnly: true,
@@ -56,9 +60,24 @@ export const POST = async (req: NextRequest) => {
       path: '/',
     });
 
-     // Remove password from user data
+    // Send login confirmation email using Resend
+    const { data, error } = await resend.emails.send({
+      from: 'noReply@tradenexusonline.com',
+      to: [user.email], // Assuming user object has an email field
+      subject: 'Login Confirmation',
+      react: EmailTemplate({name:user.name}) // Pass the username to your template
+    });
 
-    return NextResponse.json({ message: 'Sign-in successful', user }, { status: 200 });
+    if (error) {
+      console.error('Error sending email:', error);
+    } else {
+      console.log('Email sent successfully:', data);
+    }
+
+    // Remove password from user data before returning response
+  
+
+    return NextResponse.json({ message: 'Sign-in successful'}, { status: 200 });
   } catch (error) {
     console.error('Signin error:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
