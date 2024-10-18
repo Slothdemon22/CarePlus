@@ -89,7 +89,7 @@ const EmailTemplate = ({ name }: { name: string }) => {
                       marginBottom: '25px',
                     }}
                   >
-                    You have successfully signed in. If this wasn't you or if you
+                    You have successfully signed in. If this wasn&apos;t you or if you
                     encounter any issues, feel free to contact our support team.
                   </p>
 
