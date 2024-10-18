@@ -32,6 +32,7 @@ export async function middleware(req: NextRequest) {
     // Check if the current route requires `isComplete` check
     if (pathname === "/appointment") {
       console.log(payload.isComplete, "h");
+      if(!token) return NextResponse.redirect(new URL("/", req.url));
       // console.log(payload.isComplete, "h");
       if (!payload.isComplete) {
         // If `isComplete` is false or not present, redirect to `/Details`

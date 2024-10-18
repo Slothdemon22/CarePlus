@@ -36,6 +36,7 @@ export const POST=async(req: NextRequest) =>{
       name,
       email,
       password: hashedPassword,
+      isComplete: false,
     });
 
     await user.save(); // Save user to the database
