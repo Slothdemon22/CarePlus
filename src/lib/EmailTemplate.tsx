@@ -1,7 +1,17 @@
 import React from 'react';
 
-// Main email template component
-const EmailTemplate = ({ name }: { name: string }) => {
+// Main email template component for appointment confirmation
+const AppointmentEmailTemplate = ({
+  name,
+  doctor,
+  appointmentReason,
+  dateTime,
+}: {
+  name: string;
+  doctor: string;
+  appointmentReason: string;
+  dateTime: string;
+}) => {
   return (
     <div>
       <table
@@ -68,7 +78,7 @@ const EmailTemplate = ({ name }: { name: string }) => {
                       fontWeight: 'bold',
                     }}
                   >
-                    Welcome, {name}!
+                    Appointment Confirmation
                   </h2>
 
                   <p
@@ -78,8 +88,7 @@ const EmailTemplate = ({ name }: { name: string }) => {
                       marginBottom: '25px',
                     }}
                   >
-                    We're thrilled to have you at <strong>CarePlus</strong>. Your
-                    health and well-being are our priority.
+                    Dear <strong>{name}</strong>,
                   </p>
 
                   <p
@@ -89,8 +98,37 @@ const EmailTemplate = ({ name }: { name: string }) => {
                       marginBottom: '25px',
                     }}
                   >
-                    You have successfully signed in. If this wasn&apos;t you or if you
-                    encounter any issues, feel free to contact our support team.
+                    Your appointment with <strong>{doctor}</strong> has been scheduled successfully.
+                  </p>
+
+                  <p
+                    style={{
+                      fontSize: '18px',
+                      lineHeight: '1.8',
+                      marginBottom: '25px',
+                    }}
+                  >
+                    <strong>Reason for Appointment:</strong> {appointmentReason}
+                  </p>
+
+                  <p
+                    style={{
+                      fontSize: '18px',
+                      lineHeight: '1.8',
+                      marginBottom: '25px',
+                    }}
+                  >
+                    <strong>Date and Time:</strong> {dateTime}
+                  </p>
+
+                  <p
+                    style={{
+                      fontSize: '18px',
+                      lineHeight: '1.8',
+                      marginBottom: '25px',
+                    }}
+                  >
+                    Thank you for choosing CarePlus! If you have any questions, feel free to contact us.
                   </p>
 
                   <div style={{ textAlign: 'center', margin: '30px 0' }}>
@@ -117,17 +155,6 @@ const EmailTemplate = ({ name }: { name: string }) => {
                       Go to Dashboard
                     </a>
                   </div>
-
-                  <p
-                    style={{
-                      fontSize: '16px',
-                      color: '#666666',
-                      textAlign: 'center',
-                      marginTop: '20px',
-                    }}
-                  >
-                    Thank you for choosing CarePlus!
-                  </p>
                 </td>
               </tr>
 
@@ -173,4 +200,4 @@ const EmailTemplate = ({ name }: { name: string }) => {
   );
 };
 
-export default EmailTemplate;
+export default AppointmentEmailTemplate;
