@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+
 import PersonalInfo from "../../comp/PersonalInfo";
 import MedicalInfo from "../../comp/MedicalInfo";
 import Identity from "../../comp/Identity";
@@ -11,11 +11,13 @@ import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react"; // Import loader icon
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEdgeStore } from "@/lib/edgestore";
 import { CombinedFormValues } from "@/types/combinedForm";
 
 const Details = () => {
-  const { edgestore } = useEdgeStore();
+    const { edgestore } = useEdgeStore();
+    const router = useRouter();
   const [file, setFile] = React.useState<File | null>(null);
   const [loading, setLoading] = useState(false); // Loading state
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<CombinedFormValues>({
@@ -25,7 +27,7 @@ const Details = () => {
     },
   });
 
-  const router = useRouter();
+
 
   const onSubmit = async (data: CombinedFormValues) => {
     if (file === null) {
@@ -61,7 +63,8 @@ const Details = () => {
       console.log(response);
       toast.success("Details uploaded successfully");
 
-      // Redirect to the /appointment page
+        // Redirect to the /appointment page
+        console.log("hello")
       router.push("/appointment");
     } catch (error) {
       console.log(error);

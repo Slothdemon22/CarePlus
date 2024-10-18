@@ -9,6 +9,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
@@ -19,6 +20,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+;
+
 
 
 // Define the Zod schema for form validation
@@ -36,6 +39,7 @@ const signUpSchema = z.object({
 type SignUpFormData = z.infer<typeof signUpSchema>;
 
 const SignUp = () => {
+    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const {
         register,
@@ -58,13 +62,15 @@ const SignUp = () => {
             const res = await axios.post("/api/signup", data);
             console.log(res);
             toast.success("Sign-up successful!");
-           
+            
 
            
         } catch (error) {
             toast.error("Sign-up failed. Please try again.");
         } finally {
             setLoading(false);
+          
+            router.push("/")
         }
     };
 

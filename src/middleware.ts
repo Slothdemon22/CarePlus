@@ -1,60 +1,57 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
-// Removed dbConnect and User imports since they are not used
-// import dbConnect from "@/lib/dbConnect"; 
-// import User from "@/app/api/schema/user"; 
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  
+  // Set CORS headers (for preflight and actual requests)
   const res = NextResponse.next();
-
-  // Set CORS headers
   res.headers.set("Access-Control-Allow-Origin", "https://main.d1qe4cj838e38d.amplifyapp.com");
   res.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  // Handle preflight requests
+  // Handle OPTIONS request (preflight)
   if (req.method === "OPTIONS") {
     return new NextResponse(null, { status: 204 });
   }
 
-  const token = req.cookies.get("token")?.value; // Use optional chaining and assume it's a string | undefined
+  // Check for the presence of the token in cookies
+  const token = req.cookies.get("token")?.value;
   if (!token) {
-    // If no token is present, redirect to the home page
-    return 
+    // Redirect to the home page if no token is found
+    return NextResponse.redirect(new URL("/signin", req.url)); 
   }
 
   try {
-    // Verify the token and extract the payload
+    // Verify the token
     const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
-    // console.log("Decoded Payload:", payload);
 
-    // Check if the current route requires `isComplete` check
+    // Check if the current route is "/appointment" and if any user-specific conditions should apply
     if (pathname === "/appointment") {
-      console.log(payload.isComplete, "h");
-      if(!token) return NextResponse.redirect(new URL("/", req.url));
-      // console.log(payload.isComplete, "h");
-      if (!payload.isComplete) {
-        // If `isComplete` is false or not present, redirect to `/Details`
-        return NextResponse.redirect(new URL("/Details", req.url)); 
+      // Add any custom logic or checks here, if needed
+      // For example: check if the user's data is complete and redirect to "/Details"
+      console.log(payload);
+      if(!payload.isComplete) {
+        return NextResponse.redirect(new URL("/Details", req.url));
       }
+      return res; 
     }
 
-    // Check if the current route is the dashboard and verify the user's email
+    // If route is "/Dashboard", check if the email matches the admin's email
     if (pathname === "/Dashboard") {
       if (payload.email !== "www.basilslothdemon@gmail.com") {
-        // Redirect to home if the email doesn't match the admin's email
         return NextResponse.redirect(new URL("/", req.url));
       }
     }
 
   } catch (error) {
+    // If JWT verification fails, redirect to home
     console.error("JWT verification failed:", error);
-    // If verification fails, redirect to the home page
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  return res; // Proceed if no redirects are triggered
+  // Return the response if no redirects were triggered
+  return res;
 }
 
 export const config = {
