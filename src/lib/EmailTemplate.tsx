@@ -7,9 +7,9 @@ const EmailTemplate = ({ name }: { name: string }) => {
       <table
         width="100%"
         style={{
-          backgroundColor: '#f4f4f4',
-          padding: '20px',
-          fontFamily: "'Arial', sans-serif",
+          backgroundColor: '#f9f9f9',
+          padding: '40px 0',
+          fontFamily: '&apos;Arial&apos;, sans-serif',
         }}
         cellPadding={0}
         cellSpacing={0}
@@ -18,12 +18,12 @@ const EmailTemplate = ({ name }: { name: string }) => {
           <td>
             <table
               style={{
-                maxWidth: '600px',
+                maxWidth: '650px',
                 margin: '0 auto',
                 backgroundColor: '#ffffff',
-                borderRadius: '12px',
+                borderRadius: '16px',
                 overflow: 'hidden',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                boxShadow: '0 8px 20px rgba(0, 0, 0, 0.15)',
               }}
               cellPadding={0}
               cellSpacing={0}
@@ -32,19 +32,20 @@ const EmailTemplate = ({ name }: { name: string }) => {
               <tr>
                 <td
                   style={{
-                    background: 'linear-gradient(90deg, #0c7b30, #1a923c)',
-                    padding: '30px',
+                    background: 'linear-gradient(90deg, #28a745, #3dbd5d)',
+                    padding: '40px',
                     textAlign: 'center',
-                    borderBottom: '4px solid #0c7b30',
+                    borderBottom: '6px solid #28a745',
                   }}
                 >
                   <h1
                     style={{
                       color: '#ffffff',
-                      fontSize: '36px',
+                      fontSize: '40px',
                       margin: '0',
-                      fontWeight: 'bold',
-                      textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)',
+                      fontWeight: '700',
+                      letterSpacing: '1.5px',
+                      textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
                     }}
                   >
                     CarePlus
@@ -56,16 +57,16 @@ const EmailTemplate = ({ name }: { name: string }) => {
               <tr>
                 <td
                   style={{
-                    padding: '30px 40px',
-                    color: '#333333',
+                    padding: '40px 50px',
+                    color: '#444444',
                   }}
                 >
                   <h2
                     style={{
-                      color: '#0c7b30',
-                      fontSize: '28px',
-                      marginBottom: '20px',
-                      fontWeight: 'bold',
+                      color: '#28a745',
+                      fontSize: '30px',
+                      marginBottom: '25px',
+                      fontWeight: '700',
                     }}
                   >
                     Welcome, {name}!
@@ -73,9 +74,10 @@ const EmailTemplate = ({ name }: { name: string }) => {
 
                   <p
                     style={{
-                      fontSize: '18px',
+                      fontSize: '20px',
                       lineHeight: '1.8',
-                      marginBottom: '25px',
+                      marginBottom: '30px',
+                      color: '#555555',
                     }}
                   >
                     We&apos;re thrilled to have you at <strong>CarePlus</strong>. Your
@@ -86,32 +88,33 @@ const EmailTemplate = ({ name }: { name: string }) => {
                     style={{
                       fontSize: '18px',
                       lineHeight: '1.8',
-                      marginBottom: '25px',
+                      marginBottom: '30px',
                     }}
                   >
                     You have successfully signed in. If this wasn&apos;t you or if you
                     encounter any issues, feel free to contact our support team.
                   </p>
 
-                  <div style={{ textAlign: 'center', margin: '30px 0' }}>
+                  <div style={{ textAlign: 'center', margin: '40px 0' }}>
                     <a
                       href="https://careplus.com/dashboard"
                       style={{
-                        backgroundColor: '#0c7b30',
+                        backgroundColor: '#28a745',
                         color: '#ffffff',
-                        padding: '15px 35px',
+                        padding: '18px 45px',
                         fontSize: '18px',
-                        borderRadius: '8px',
+                        borderRadius: '10px',
                         textDecoration: 'none',
                         display: 'inline-block',
-                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                        fontWeight: 'bold',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
                         transition: 'background-color 0.3s ease',
                       }}
                       onMouseEnter={(e) =>
-                        (e.currentTarget.style.backgroundColor = '#1a923c')
+                        (e.currentTarget.style.backgroundColor = '#3dbd5d')
                       }
                       onMouseLeave={(e) =>
-                        (e.currentTarget.style.backgroundColor = '#0c7b30')
+                        (e.currentTarget.style.backgroundColor = '#28a745')
                       }
                     >
                       Go to Dashboard
@@ -135,17 +138,17 @@ const EmailTemplate = ({ name }: { name: string }) => {
               <tr>
                 <td
                   style={{
-                    backgroundColor: '#333333',
-                    padding: '20px',
+                    backgroundColor: '#222222',
+                    padding: '25px',
                     textAlign: 'center',
-                    borderTop: '4px solid #0c7b30',
+                    borderTop: '6px solid #28a745',
                   }}
                 >
                   <p
                     style={{
-                      color: '#ffffff',
-                      fontSize: '14px',
-                      lineHeight: '1.5',
+                      color: '#dddddd',
+                      fontSize: '15px',
+                      lineHeight: '1.6',
                       margin: '0',
                     }}
                   >
@@ -154,8 +157,9 @@ const EmailTemplate = ({ name }: { name: string }) => {
                     <a
                       href="https://careplus.com"
                       style={{
-                        color: '#0c7b30',
+                        color: '#28a745',
                         textDecoration: 'none',
+                        fontWeight: 'bold',
                       }}
                     >
                       www.careplus.com
