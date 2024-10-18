@@ -19,7 +19,7 @@ const AppointmentEmailTemplate = ({
         style={{
           backgroundColor: '#f4f4f4',
           padding: '20px',
-          fontFamily: "'Arial', sans-serif",
+          fontFamily: '&apos;Arial&apos;, sans-serif',
         }}
         cellPadding={0}
         cellSpacing={0}
@@ -188,7 +188,7 @@ const AppointmentEmailTemplate = ({
                       www.careplus.com
                     </a>
                     <br />
-                    © 2024 CarePlus. All rights reserved.
+                    &copy; 2024 CarePlus. All rights reserved.
                   </p>
                 </td>
               </tr>
