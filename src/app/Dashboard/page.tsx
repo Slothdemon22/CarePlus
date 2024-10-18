@@ -27,7 +27,7 @@ export default function AppointmentTable() {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get<{ data: Appointment[] }>('http://localhost:3000/api/getAppoinments');
+      const response = await axios.get<{ data: Appointment[] }>('/api/getAppoinments');
       console.log(response.data.data);
       // Ensure the response data has the correct type
       if (Array.isArray(response.data.data)) {
@@ -48,16 +48,25 @@ export default function AppointmentTable() {
       console.error(error);
     }
   };
-  
 
   useEffect(() => {
     fetchAppointments(); // Fetch appointments when component mounts
   }, []);
 
-  const handleStatusChange = (id: string, newStatus: Appointment['status']) => {
-    setAppointments(appointments.map(appointment =>
-      appointment.id === id ? { ...appointment, status: newStatus } : appointment
-    ));
+  const handleStatusChange = async (id: string, newStatus: Appointment['status']) => {
+    try {
+      // Optionally, send an API request to update status on the backend
+      await axios.post(`/api/updateStatus/${id}`, { status: newStatus });
+
+      // Update only the specific appointment's status locally
+      setAppointments(prevAppointments =>
+        prevAppointments.map(appointment =>
+          appointment.id === id ? { ...appointment, status: newStatus } : appointment
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update appointment status:", error);
+    }
   };
 
   const getStatusColor = (status: Appointment['status']) => {

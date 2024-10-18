@@ -11,7 +11,7 @@ interface SigninRequestBody {
 }
 
 export const POST = async (req: NextRequest) => {
-  console.log("hello");
+ 
 
   await dbConnect();
 
@@ -34,7 +34,8 @@ export const POST = async (req: NextRequest) => {
     if (!isMatch) {
       return NextResponse.json({ message: 'Invalid email or password' }, { status: 401 });
     }
-   console.log(user.name)
+    console.log(user.name)
+    console.log("h",user.isComplete)
     // Generate JWT token
     const token = await new SignJWT({
       userId: user._id,

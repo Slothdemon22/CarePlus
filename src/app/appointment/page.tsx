@@ -99,7 +99,7 @@ export default function DoctorSelect() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row justify-between w-full h-auto gap-6">
+    <div className="flex flex-col lg:flex-row justify-between w-full h-auto gap-6 p-6">
       {/* Main content */}
       <div className="w-full lg:w-2/3 p-4">
         {/* Heading and Introduction */}
@@ -226,17 +226,19 @@ export default function DoctorSelect() {
       </div>
 
       {/* Side Image */}
-      <div className="relative w-full lg:w-1/4 h-auto">
-        <div className="relative w-full h-full lg:h-auto flex justify-end">
-          <Image
-            src="/side1.png" // Adjust the image path accordingly
-            alt="Side Image"
-            width={350}
-            height={500}
-            className="object-cover rounded-lg"
-          />
-        </div>
-      </div>
+     {/* Side Image */}
+<div className="hidden lg:block relative w-full lg:w-1/4 h-auto">
+  <div className="absolute right-0 top-0 h-full flex justify-end">
+    <Image
+      src="/side1.png" // Adjust the image path accordingly
+      alt="Side Image"
+      width={350}
+      height={500}
+      className="object-cover rounded-lg"
+    />
+  </div>
+</div>
+
     </div>
   );
 }
