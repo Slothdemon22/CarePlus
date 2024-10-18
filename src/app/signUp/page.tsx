@@ -62,6 +62,8 @@ const SignUp = () => {
             const res = await axios.post("/api/signup", data);
             console.log(res);
             toast.success("Sign-up successful!");
+            window.location.href = "/signin";
+            
             
 
            
